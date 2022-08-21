@@ -1,0 +1,8 @@
+<beans >
+    <bean id="test1" class="tt.A"/>
+
+
+
+
+
+</beans>

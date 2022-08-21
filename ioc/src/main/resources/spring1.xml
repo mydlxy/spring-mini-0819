@@ -1,0 +1,8 @@
+<beans >
+    <bean id="test2" class="tt.B" scope="prototype">
+        <constructor type="tt.A" ref="test1" />
+    </bean>
+
+    <propertyPlaceholder load="test.properties"/>
+    <componentScan />
+</beans>
