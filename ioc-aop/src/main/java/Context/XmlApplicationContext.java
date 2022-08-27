@@ -59,27 +59,35 @@ public class XmlApplicationContext implements ApplicationContext {
 
      void  getConfigInfo() throws Throwable {
         if(countDownLatch > 1) {
-            ExecutorService tasks = Executors.newFixedThreadPool(countDownLatch);
-            CountDownLatch latch = new CountDownLatch(countDownLatch);
-            StringBuffer sb = new StringBuffer();
-            for (int i = 0; i < countDownLatch; i++) {
-                int finalI = i;
-                tasks.execute(()->{
-                    try {
-                        XmlParse.parseXml(paths[finalI],beanFactory.configInfo);
-                    } catch (DocumentException e) {
-                        e.printStackTrace();
-                        sb.append(e.getMessage());
-                    }
-                    latch.countDown();
-                });
-            }
-            latch.await();
-            tasks.shutdown();
-            if(!sb.toString().equals(""))throw new RuntimeException(sb.toString());
+            threadsParseXml();
         }else{
             XmlParse.parseXml(paths[0],beanFactory.configInfo);
         }
+
+     }
+
+
+
+     public void threadsParseXml() throws InterruptedException {
+         ExecutorService tasks = Executors.newFixedThreadPool(countDownLatch);
+         CountDownLatch latch = new CountDownLatch(countDownLatch);
+         StringBuffer sb = new StringBuffer();
+         for (int i = 0; i < countDownLatch; i++) {
+             int finalI = i;
+             tasks.execute(()->{
+                 try {
+                     XmlParse.parseXml(paths[finalI],beanFactory.configInfo);
+                 } catch (DocumentException e) {
+//                        e.printStackTrace();
+                     sb.append("exception parse  ["+paths[finalI]+"] :"+e.getMessage());
+                 }
+                 latch.countDown();
+             });
+         }
+         latch.await();
+         tasks.shutdown();
+         if(!sb.toString().equals(""))
+             throw new RuntimeException(sb.toString());
 
      }
 
@@ -109,6 +117,7 @@ public class XmlApplicationContext implements ApplicationContext {
                     beanFactory.creatBean(beanDefinition,true);
              } catch (Exception e) {
                  e.printStackTrace();
+                 throw new RuntimeException(e.getMessage());
              }
          });
 

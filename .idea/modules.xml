@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ioc/ioc.iml" filepath="$PROJECT_DIR$/ioc/ioc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ioc-aop/ioc-aop.iml" filepath="$PROJECT_DIR$/ioc-aop/ioc-aop.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/spring-mini-0819.iml" filepath="$PROJECT_DIR$/.idea/spring-mini-0819.iml" />
     </modules>
   </component>
