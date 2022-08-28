@@ -12,23 +12,20 @@ import java.util.*;
 public class AopConfig {
 
     /**
-     * <aop:config>
-     *     <aop:pointcut  id="" expression="" />
-     *
-     *     <aop:aspect  ref="">
-     *         <aop:before pointcut=""  method=""/>
-     *         <aop:after pointcut-ref=""  method=""/>
-     *         <aop:after-returning pointcut=""  method=""/>
-     *         <aop:after-throwing pointcut=""  method="" exception=""/>
-     *         <aop:around pointcut=""  method=""/>
+     * <config>
+     *     <aspect  ref="">
+     *         <before pointcut=""  method=""/>
+     *         <after pointcut-ref=""  method=""/>
+     *         <after-returning pointcut=""  method=""/>
+     *         <after-throwing pointcut=""  method="" exception=""/>
+     *         <around pointcut=""  method=""/>
      *     </aspect>
-     * </aop:config>
+     * </config>
      *
      */
     /**
      * <aop:pointcut   id="" expression="" />
      */
-    Map<String,String> pointcuts;
 
 
     /**

@@ -1,5 +1,6 @@
 package Context;
 
+import aop.config.MethodAdvice;
 import bean.*;
 import com.sun.org.apache.bcel.internal.generic.RETURN;
 import exception.CycleDependencyException;
@@ -25,7 +26,9 @@ public class BeanFactory {
 
     public static final String SINGLE="single";
 
-    List<BeanPostProcessor> beanPostProcessors;
+    List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
+
+    MethodAdvice methodAdvice;
 
 
 
@@ -51,6 +54,14 @@ public class BeanFactory {
 
     public void registerBeanPostProcessor(){
         //扫描 所有的BeanPostProcessor
+
+//        be
+
+    }
+    public void registerBeanPostProcessor(BeanPostProcessor beanPostProcessor){
+        //扫描 所有的BeanPostProcessor
+
+        beanPostProcessors.add(beanPostProcessor);
 
     }
 
@@ -135,14 +146,9 @@ public class BeanFactory {
         log.info("create bean type:"+beanDefinition.getScope()+";beanName="+beanDefinition.getBeanName());
        Object bean =  creatBean(beanDefinition,false);
        if(beanPostProcessors != null){
-           beanPostProcessors.forEach(beanPostProcessor -> {
-               try {
-                   beanPostProcessor.postProcessor();
-               } catch (Exception e) {
-                   e.printStackTrace();
-                   throw new RuntimeException(e.getMessage());
-               }
-           });
+           for (BeanPostProcessor beanPostProcessor : beanPostProcessors) {
+               bean =  beanPostProcessor.postProcessor(bean,methodAdvice);
+           }
        }
        fillBeanProperty(beanDefinition,bean);
        return bean;
@@ -235,6 +241,16 @@ public class BeanFactory {
 
         }
         throw new RuntimeException("找不到类型："+className);
+    }
+
+
+    public boolean checkExistsInPostBean(String beanName){
+        return postProcessSingleBean.containsKey(beanName);
+    }
+
+
+    public Object getBeanInPostBean(String name){
+        return postProcessSingleBean.get(name);
     }
 
 }

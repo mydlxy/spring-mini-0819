@@ -1,11 +1,13 @@
 package Context;
 
+import aop.advice.Advice;
 import bean.BeanDefinition;
 import utils.AnnotationUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -14,6 +16,9 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 
 public class ConfigInfo {
+
+    private Map<String , Set<Advice>> aspect = new HashMap<>();
+
     private ConcurrentHashMap<String , BeanDefinition>beanDefinitions = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String , Properties>    propertiesMap   = new ConcurrentHashMap<>();
 
@@ -98,8 +103,15 @@ public class ConfigInfo {
     }
 
 
+    public Map<String, Set<Advice>> getAspect() {
+        return aspect;
+    }
 
 
 
 
+    public ConfigInfo setAspect(Map<String, Set<Advice>> aspect) {
+        this.aspect = aspect;
+        return this;
+    }
 }

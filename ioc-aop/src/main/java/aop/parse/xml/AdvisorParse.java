@@ -1,10 +1,15 @@
 package aop.parse.xml;
 
 import Context.ConfigInfo;
+import aop.advice.Advice;
+import aop.advice.AdvisorAdapter;
+import aop.config.PointcutUtils;
 import org.dom4j.Element;
 import parse.xml.node.XmlNode;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author myd
@@ -14,8 +19,9 @@ import java.util.List;
 public class AdvisorParse implements XmlNode {
 
     private static final String ASPECT = "aspect";
-    private static final String EXPRESSION = "expression";
     private static final String ID = "id";
+
+    private static final String METHOD_NAME = "method";
     private static final String POINTCUT = "pointcut";
     private static final String ADVICE_BEAN_NAME = "adviceBeanName";
     private static final String ADVISOR = "advisor";
@@ -42,24 +48,47 @@ public class AdvisorParse implements XmlNode {
 
     /**
      *
-     * <aop:config>
-     *     <aop:pointcut id="pointcut-1"  expression="xxxxxx"  />
+     * <aopConfig>
+     *    * XXXXXXXXX<aop:pointcut id="pointcut-1"  expression="xxxxxx"  />XXXXXXXXX
      *      <aop:aspect id="" ref="">
      *          <aop:before pointcut=""  method=""/> 执行targetMethod方法前执行
-     *          <aop:after pointcut-ref="pointcut-1"   method=""/>  发生异常也执行finally
+     *          <aop:after pointcut="pointcut-1"   method=""/>  发生异常也执行finally
      *          <aop:after-returning pointcut="" method="" />执行targetMethod之后执行
      *          <aop:after-throwing pointcut=""  method="" exception="" />发生异常之后执行；
      *          <aop:around pointcut ="" method="" /> 是前几个的集合。。
      *      </aop:aspect>
-     * </aop:config>
+     * </aopConfig>
      */
+
+    private static final AdvisorParse advisorParse = new AdvisorParse();
+
+    public static AdvisorParse getInstance(){
+        return advisorParse;
+    }
 
     @Override
     public void parseLabel(Element node, ConfigInfo configInfo) {
-
-        String aspect = node.attributeValue(REF);//切面，ref：关联的beanID
-
-        List<Element> elements = node.elements();
-
+        List<Element> aspects = node.elements();
+        aspects.forEach(aspect->aspectParse(aspect,configInfo));
     }
+
+
+    public void aspectParse(Element aspect,ConfigInfo configInfo){
+       String ref = aspect.attributeValue(REF);
+        Set<Advice> advices = new HashSet<>();
+        List<Element> adviceList = aspect.elements();
+        for (Element element : adviceList) {
+            Advice advice =  adviceParse(element);
+            advices.add(advice);
+        }
+        configInfo.getAspect().put(ref,advices);
+    }
+
+    public Advice adviceParse(Element advice){
+        String type  = advice.getName();
+        String pointcut = advice.attributeValue(POINTCUT);
+        String methodName  = advice.attributeValue(METHOD_NAME);
+        return new Advice(type, PointcutUtils.parsePointcut(pointcut),methodName);
+    }
+
 }

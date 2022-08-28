@@ -18,6 +18,18 @@ public class Pointcut {
 
     private String paramList;
 
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof Pointcut))return false;
+        Pointcut compare  = (Pointcut) obj;
+
+        return  compare.getAccessModifier().equals(accessModifier) &&
+                compare.getReturnType().equals(returnType) &&
+                compare.getClassPath().equals(classPath) &&
+                compare.getMethodName().equals(methodName)&&
+                compare.getParamList().equals(paramList);
+    }
+
     public Pointcut(String accessModifier, String returnType, String classPath, String methodName, String paramList) {
         this.accessModifier = accessModifier;
         this.returnType = returnType;

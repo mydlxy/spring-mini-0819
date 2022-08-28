@@ -21,7 +21,7 @@ public class XmlParse {
 
     static Logger log = Logger.getLogger(XmlParse.class.getName());
 
-    public static void parseXml(String path, ConfigInfo configInfo) throws DocumentException {
+    public static void parseXml(String path, ConfigInfo configInfo) throws DocumentException,NullPointerException {
         String realPath = Thread.currentThread().getContextClassLoader().getResource(path).getPath();
         log.info("[start] parse xml,path="+path);
         SAXReader reader = new SAXReader();

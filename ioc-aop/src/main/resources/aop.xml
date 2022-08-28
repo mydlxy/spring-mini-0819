@@ -1,0 +1,18 @@
+<beans>
+
+
+    <bean  id="aspect" class="tt.AOPtest"/>
+    <bean class ="tt.Aspected"/>
+    <aopConfig>
+
+        <aspect ref = "aspect">
+            <before pointcut="execution (* * * *Test())"  method="before" />
+           <!-- <after pointcut="execution (* * * *Test())"  method="after" />-->
+            <around pointcut="execution (* * *  *Test())"  method="before" />
+
+        </aspect>
+
+
+    </aopConfig>
+
+</beans>

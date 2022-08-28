@@ -1,5 +1,8 @@
 package Context;
 
+import aop.advice.Advice;
+import aop.config.MethodAdvice;
+import aop.proxy.AopProxy;
 import bean.BeanDefinition;
 import org.dom4j.DocumentException;
 import parse.xml.RegisterParseLabel;
@@ -8,9 +11,11 @@ import parse.xml.node.ComponentScan;
 import parse.xml.node.XmlNode;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -25,11 +30,13 @@ public class XmlApplicationContext implements ApplicationContext {
 
     BeanFactory beanFactory = new BeanFactory();
 
+    MethodAdvice methodAdvice;
+
     String[] paths;
 
     int countDownLatch;
 
-
+    BeanPostProcessor beanPostProcessor;
 
     public XmlApplicationContext(String path) throws Throwable {
         this(path,null,null);
@@ -80,6 +87,8 @@ public class XmlApplicationContext implements ApplicationContext {
                  } catch (DocumentException e) {
 //                        e.printStackTrace();
                      sb.append("exception parse  ["+paths[finalI]+"] :"+e.getMessage());
+                 }catch (NullPointerException e){
+                     sb.append("exception parse  ["+paths[finalI]+"] :"+e.getMessage());
                  }
                  latch.countDown();
              });
@@ -127,24 +136,72 @@ public class XmlApplicationContext implements ApplicationContext {
 
 
      public void registerBeanPostProcessor(){
-        //找实现了BeanPostProcessor接口的类，用于处理bean;为什么不传参数呢？如果与其他多个框架整合，只要格子实现了这个
-         //接口就可以实现他们的功能了；
-         //传参就解决不了这个问题：spring + springMVC  + Mybatis
-
-         //springMVC 与spring整合
-         //Mybatis  与spring整合
-
-         beanFactory.registerBeanPostProcessor();
-
-
+         beanFactory.registerBeanPostProcessor(AopProxy.getInstance());
+         beanPostProcessor = AopProxy.getInstance();
      }
 
 
      //循环遍历beanPostProcessor接口；
     public void beanPostProcessor(){
-          beanFactory.postProcessSingleBean= beanFactory.initSingleBean;
+        if(!beanFactory.configInfo.getAspect().isEmpty()){
+            methodAdvice = new MethodAdvice();
+            initMethodAdvice();
+            beanFactory.getInitSingleBean().forEach((name,bean)->{
+            try {
+                   bean =  beanPostProcessor.postProcessor(bean,methodAdvice);
+                    beanFactory.postProcessSingleBean.put(name,bean);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw new RuntimeException(e.getMessage());
+                }
+            });
+
+
+        }else{
+            beanFactory.postProcessSingleBean= beanFactory.initSingleBean;
+        }
     }
 
+
+    /**
+     * aspect将ref，转换成Object；
+     *
+     */
+    void initMethodAdvice(){
+        Map<String, Set<Advice>> aspects = beanFactory.configInfo.getAspect();
+        aspects.forEach((ref,advices)->{
+            boolean existsBean = beanFactory.checkExistsInPostBean(ref);
+            Object bean = beanFactory.getBeanInPostBean(ref);
+            Set<Advice> adviceSet = aspects.get(ref);
+            if(bean == null){
+                try {
+                     bean = beanFactory.creatBean(beanFactory.configInfo.getBeanDefinitionByName(ref), true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw new RuntimeException("creat aspect bean error ref:"+ ref);
+                }
+            }
+            fillMethodAdvice(bean,adviceSet);
+        });
+
+    }
+
+    /*
+    * methodName  ->  method
+    * */
+    void fillMethodAdvice(Object aspect,Set<Advice> advices){
+        Class<?> beanClass = aspect.getClass();
+        advices.forEach(advice->{
+            String methodName = advice.getMethodName();
+            try {
+                advice.setMethod(beanClass.getDeclaredMethod(methodName,null)).setAspect(aspect);
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+                throw new RuntimeException("获取切面配置的method 异常"+methodName);
+            }
+            methodAdvice.addAdvice(advice);
+        });
+    }
 
     public void fillBeanProperties(){
         ConcurrentHashMap<String, BeanDefinition> beanDefinitions = beanFactory.configInfo.getBeanDefinitions();

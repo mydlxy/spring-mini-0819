@@ -92,7 +92,7 @@ public class PointcutUtils {
     }
     static boolean matchMethodName(String name, Method method) {
         if (name.equals("*")) return true;
-        return method.getName().matches(name.replaceAll("\\*", "\\w*"));
+        return method.getName().matches(name.replaceAll("\\*", "\\\\w*"));
     }
     static boolean matchParamList(String paramList, Method method) {
 

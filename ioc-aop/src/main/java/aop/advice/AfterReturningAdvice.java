@@ -2,6 +2,7 @@ package aop.advice;
 
 import aop.config.Pointcut;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -9,21 +10,10 @@ import java.lang.reflect.Method;
  * @date 2022/8/23  11:33
  */
 
-public class AfterReturningAdvice implements Advice{
-
-    private static final String AFTER_RETURNING = "after-returning";
-
-    Pointcut pointcut;
-
-    String methodName;
-
-    Method afterReturning;
+public class AfterReturningAdvice extends Advice {
 
 
-
-
-
-
-
-
+    public AfterReturningAdvice(String type, Pointcut pointcut, String methodName) {
+        super(type, pointcut, methodName);
+    }
 }
