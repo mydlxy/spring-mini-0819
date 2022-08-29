@@ -11,17 +11,17 @@ import java.util.Set;
  */
 
 public class AfterThrowingInterceptor {
-    Set<Advice> afterThrowing;
+    List<Advice> afterThrowing;
 
     public AfterThrowingInterceptor(){
-        afterThrowing = new HashSet<>();
+        afterThrowing = new ArrayList<>();
     }
     public void add(Advice advice){
         if(!afterThrowing.contains(advice))
             afterThrowing.add(advice);
     }
 
-    public Set<Advice> getAfterThrowing() {
+    public List<Advice> getAfterThrowing() {
         return afterThrowing;
     }
 }

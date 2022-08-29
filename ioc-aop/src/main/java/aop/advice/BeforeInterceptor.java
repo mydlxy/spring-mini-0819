@@ -12,13 +12,13 @@ import java.util.Set;
 
 public class BeforeInterceptor {
 
-    Set<Advice> before;
+    List<Advice> before;
 
     public BeforeInterceptor(){
-        before = new HashSet<>();
+        before = new ArrayList<>();
     }
 
-    public Set<Advice> getBefore() {
+    public List<Advice> getBefore() {
         return before;
     }
 

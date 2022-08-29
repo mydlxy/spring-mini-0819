@@ -12,17 +12,17 @@ import java.util.Set;
 
 public class AfterReturningInterceptor {
 
-    Set<Advice> afterReturning;
+    List<Advice> afterReturning;
 
     public AfterReturningInterceptor(){
-        afterReturning = new HashSet<>();
+        afterReturning = new ArrayList<>();
     }
     public void add(Advice advice){
         if(!afterReturning.contains(advice))
          afterReturning.add(advice);
     }
 
-    public Set<Advice> getAfterReturning() {
+    public List<Advice> getAfterReturning() {
         return afterReturning;
     }
 }

@@ -31,13 +31,11 @@ public class TestAOP {
 
 //        aspected.aroundTest();//tt.inr.impl.QAZ
         QWE qaz = (QWE) context.getBean(QWE.class);
-
-
         qaz.print();
 
-        AOPtest aoPtest = (AOPtest) context.getBean(AOPtest.class);
-
-        System.out.println(aoPtest);
+//        AOPtest aoPtest = (AOPtest) context.getBean(AOPtest.class);
+//
+//        System.out.println(aoPtest);
 
 
 //        aspected.beforeTest();
@@ -47,7 +45,6 @@ public class TestAOP {
     public void test1(){
 
         QAZ t = new QAZ();
-
         Class<?>[] interfaces = t.getClass().getInterfaces();
         for (Class<?> anInterface : interfaces) {
             System.out.println(anInterface.getTypeName());

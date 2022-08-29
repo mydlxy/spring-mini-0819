@@ -7,9 +7,6 @@ import aop.config.Pointcut;
 import aop.config.PointcutUtils;
 
 import java.util.List;
-import java.util.Set;
-
-
 /**
  * @author myd
  * @date 2022/8/28  23:26
@@ -37,7 +34,7 @@ public class AopProxy implements BeanPostProcessor {
         if(matchClass(advice.getPointcut(),bean) )methodAdvice.addAdvice(advice);
     }
 
-    public void getMethodAdvice(Object bean, Set<Advice> advices, MethodAdvice methodAdvice){
+    public void getMethodAdvice(Object bean, List<Advice> advices, MethodAdvice methodAdvice){
         advices.forEach(advice->{
             if(!bean.equals(advice.getAspect()))
                 matchAndAddAdvice(bean,advice,methodAdvice);

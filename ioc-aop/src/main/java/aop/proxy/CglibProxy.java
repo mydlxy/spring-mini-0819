@@ -46,7 +46,7 @@ public class CglibProxy  {
                      ret = proxy.invokeSuper(obj, args);
                     exeAdvice(methodAdvice.getAfterReturningInterceptor().getAfterReturning(),method);
                 }catch (Throwable e){
-                    Set<Advice> afterThrowing = methodAdvice.getAfterThrowingInterceptor().getAfterThrowing();
+                    List<Advice> afterThrowing = methodAdvice.getAfterThrowingInterceptor().getAfterThrowing();
                    if(afterThrowing.isEmpty())
                        throw new RuntimeException(e.getMessage());
                    else
@@ -60,7 +60,7 @@ public class CglibProxy  {
     }
 
 
-    public void exeAdvice(Set<Advice> advices, Method method) throws InvocationTargetException, IllegalAccessException {
+    public void exeAdvice(List<Advice> advices, Method method) throws InvocationTargetException, IllegalAccessException {
         if(!advices.isEmpty()) {
             for (Advice advice : advices)
                 if(PointcutUtils.matchMethod(advice.getPointcut(),method))
