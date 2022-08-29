@@ -69,7 +69,11 @@ public class AdvisorParse implements XmlNode {
     @Override
     public void parseLabel(Element node, ConfigInfo configInfo) {
         List<Element> aspects = node.elements();
-        aspects.forEach(aspect->aspectParse(aspect,configInfo));
+        aspects.forEach(aspect->{
+            if(!aspect.getName().equals(ASPECT))
+                throw new RuntimeException("aopConfig子标签配置错误；不能解析标签："+aspect.getName());
+            aspectParse(aspect,configInfo);
+        });
     }
 
 

@@ -87,7 +87,7 @@ public class XmlApplicationContext implements ApplicationContext {
                  } catch (DocumentException e) {
 //                        e.printStackTrace();
                      sb.append("exception parse  ["+paths[finalI]+"] :"+e.getMessage());
-                 }catch (NullPointerException e){
+                 }catch (RuntimeException e){
                      sb.append("exception parse  ["+paths[finalI]+"] :"+e.getMessage());
                  }
                  latch.countDown();
