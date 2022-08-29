@@ -253,6 +253,10 @@ public class BeanFactory {
         return postProcessSingleBean.get(name);
     }
 
+    public Object getBeanInInitBean(String name){
+        return initSingleBean.get(name);
+    }
+
 }
 
 

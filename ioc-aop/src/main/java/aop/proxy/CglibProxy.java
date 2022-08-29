@@ -10,6 +10,7 @@ import net.sf.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -59,7 +60,7 @@ public class CglibProxy  {
     }
 
 
-    public void exeAdvice(Set<Advice> advices,Method method) throws InvocationTargetException, IllegalAccessException {
+    public void exeAdvice(Set<Advice> advices, Method method) throws InvocationTargetException, IllegalAccessException {
         if(!advices.isEmpty()) {
             for (Advice advice : advices)
                 if(PointcutUtils.matchMethod(advice.getPointcut(),method))

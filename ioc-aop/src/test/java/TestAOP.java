@@ -4,7 +4,10 @@ import aop.parse.xml.AdvisorParse;
 import org.junit.Test;
 import parse.xml.XmlParse;
 import parse.xml.node.XmlNode;
+import tt.AOPtest;
 import tt.Aspected;
+import tt.inr.QWE;
+import tt.inr.impl.QAZ;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,21 +29,31 @@ public class TestAOP {
                 new XmlApplicationContext("spring.xml,spring1.xml,aop.xml",labelParse,null);
         Aspected aspected = (Aspected) context.getBean(Aspected.class);
 
-//        aspected.aroundTest();
+//        aspected.aroundTest();//tt.inr.impl.QAZ
+        QWE qaz = (QWE) context.getBean(QWE.class);
 
-        aspected.beforeTest();
+
+        qaz.print();
+
+        AOPtest aoPtest = (AOPtest) context.getBean(AOPtest.class);
+
+        System.out.println(aoPtest);
+
+
+//        aspected.beforeTest();
 
     }
     @Test
     public void test1(){
 
+        QAZ t = new QAZ();
 
-        String t = "*Test";
-        String t2 = t.replaceAll("\\*","\\\\w*");
-        System.out.println("\\w*Test");
-        System.out.println(t2);
-        if("beforeTest".matches(t.replaceAll("\\*","\\\\w*"))){
-            System.out.println("match..");
+        Class<?>[] interfaces = t.getClass().getInterfaces();
+        for (Class<?> anInterface : interfaces) {
+            System.out.println(anInterface.getTypeName());
         }
+
+
+
     }
 }

@@ -75,11 +75,11 @@ public class AnnotationUtils {
 
 
     public static boolean matchSuperOrInterface(Class beanClass,String targetClassName){
+        Class superClass = beanClass.getSuperclass();
         while(true){
-            Class superClass = beanClass.getSuperclass();
             if(superClass == null || superClass.getName().equals(Object.class.getName()))break;
             if(beanClass.getSuperclass().getName().equals(targetClassName))return true;
-            beanClass =superClass;
+            superClass =superClass.getSuperclass();
         }
         Class[] interfaces = beanClass.getInterfaces();
         if(interfaces == null || interfaces.length ==0 )return false;

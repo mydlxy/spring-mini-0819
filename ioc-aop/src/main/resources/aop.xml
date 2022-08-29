@@ -6,9 +6,9 @@
     <aopConfig>
 
         <aspect ref = "aspect">
-            <before pointcut="execution (* * * *Test())"  method="before" />
-           <!-- <after pointcut="execution (* * * *Test())"  method="after" />-->
-            <around pointcut="execution (* * *  *Test())"  method="before" />
+            <before pointcut="execution (* * tt.inr.impl.* *())"  method="before" />
+            <!--<after pointcut="execution (* * * *())"  method="after" />-->
+            <around pointcut="execution (* * tt.inr.impl.*  *())"  method="before" />
 
         </aspect>
 

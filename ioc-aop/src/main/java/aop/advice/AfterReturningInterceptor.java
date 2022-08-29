@@ -1,6 +1,8 @@
 package aop.advice;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -16,7 +18,8 @@ public class AfterReturningInterceptor {
         afterReturning = new HashSet<>();
     }
     public void add(Advice advice){
-        afterReturning.add(advice);
+        if(!afterReturning.contains(advice))
+         afterReturning.add(advice);
     }
 
     public Set<Advice> getAfterReturning() {

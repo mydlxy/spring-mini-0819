@@ -10,6 +10,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -52,7 +53,7 @@ public class JDKProxy implements  InvocationHandler {
     }
 
 
-    public void exeAdvice(Set<Advice> advices,Method method) throws InvocationTargetException, IllegalAccessException {
+    public void exeAdvice(Set<Advice> advices, Method method) throws InvocationTargetException, IllegalAccessException {
         if(!advices.isEmpty()) {
             for (Advice advice : advices)
                 if(PointcutUtils.matchMethod(advice.getPointcut(),method))

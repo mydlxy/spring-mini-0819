@@ -155,8 +155,6 @@ public class XmlApplicationContext implements ApplicationContext {
                     throw new RuntimeException(e.getMessage());
                 }
             });
-
-
         }else{
             beanFactory.postProcessSingleBean= beanFactory.initSingleBean;
         }
@@ -170,16 +168,10 @@ public class XmlApplicationContext implements ApplicationContext {
     void initMethodAdvice(){
         Map<String, Set<Advice>> aspects = beanFactory.configInfo.getAspect();
         aspects.forEach((ref,advices)->{
-            boolean existsBean = beanFactory.checkExistsInPostBean(ref);
-            Object bean = beanFactory.getBeanInPostBean(ref);
+            Object bean = beanFactory.getBeanInInitBean(ref);
             Set<Advice> adviceSet = aspects.get(ref);
             if(bean == null){
-                try {
-                     bean = beanFactory.creatBean(beanFactory.configInfo.getBeanDefinitionByName(ref), true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new RuntimeException("creat aspect bean error ref:"+ ref);
-                }
+                    throw new RuntimeException("aspect bean not single ref:"+ ref);
             }
             fillMethodAdvice(bean,adviceSet);
         });

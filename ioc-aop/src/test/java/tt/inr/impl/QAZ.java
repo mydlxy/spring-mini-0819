@@ -7,6 +7,8 @@ import tt.inr.QWE;
 /**
  * @author myd
  * @date 2022/8/20  23:20
+ *
+ * tt.inr.impl.QAZ
  */
 
 @Component
@@ -26,5 +28,10 @@ public class QAZ implements QWE {
                 ", gh='" + gh + '\'' +
                 ", nb='" + nb + '\'' +
                 '}';
+    }
+
+    @Override
+    public void print() {
+        System.out.println(toString());
     }
 }

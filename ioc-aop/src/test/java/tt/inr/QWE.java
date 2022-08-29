@@ -6,4 +6,6 @@ package tt.inr;
  */
 
 public interface QWE {
+
+    void print();
 }
