@@ -166,10 +166,10 @@ public class XmlApplicationContext implements ApplicationContext {
      *
      */
     void initMethodAdvice(){
-        Map<String, Set<Advice>> aspects = beanFactory.configInfo.getAspect();
+        Map<String, List<Advice>> aspects = beanFactory.configInfo.getAspect();
         aspects.forEach((ref,advices)->{
             Object bean = beanFactory.getBeanInInitBean(ref);
-            Set<Advice> adviceSet = aspects.get(ref);
+            List<Advice> adviceSet = aspects.get(ref);
             if(bean == null){
                     throw new RuntimeException("aspect bean not single ref:"+ ref);
             }
@@ -181,7 +181,7 @@ public class XmlApplicationContext implements ApplicationContext {
     /*
     * methodName  ->  method
     * */
-    void fillMethodAdvice(Object aspect,Set<Advice> advices){
+    void fillMethodAdvice(Object aspect,List<Advice> advices){
         Class<?> beanClass = aspect.getClass();
         advices.forEach(advice->{
             String methodName = advice.getMethodName();

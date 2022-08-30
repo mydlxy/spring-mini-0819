@@ -6,10 +6,7 @@ package tt;
  */
 
 public class B {
-
-
 public A a;
-
 public B(A a){
     this.a = a;
 }

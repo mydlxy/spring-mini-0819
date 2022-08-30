@@ -20,25 +20,15 @@ import java.util.Map;
 public class TestAOP {
     @Test
     public void test() throws Throwable {
-
-
         Map<String , XmlNode> labelParse  = new HashMap<>();
-
         labelParse.put("aopConfig", AdvisorParse.getInstance());
         ApplicationContext context =
                 new XmlApplicationContext("spring.xml,spring1.xml,aop.xml",labelParse,null);
         Aspected aspected = (Aspected) context.getBean(Aspected.class);
 
-//        aspected.aroundTest();//tt.inr.impl.QAZ
         QWE qaz = (QWE) context.getBean(QWE.class);
         qaz.print();
 
-//        AOPtest aoPtest = (AOPtest) context.getBean(AOPtest.class);
-//
-//        System.out.println(aoPtest);
-
-
-//        aspected.beforeTest();
 
     }
     @Test

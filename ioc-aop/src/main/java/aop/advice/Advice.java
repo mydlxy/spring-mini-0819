@@ -28,14 +28,22 @@ public class Advice {
 
     Object aspect;
 
+    String ref;
 
 
     @Override
-    public boolean equals(Object obj) {
+    public int hashCode() {
+        int h = 0;
+        h = h*31 + pointcut.hashCode();
+        h = h*31 + method.hashCode();
+        return h;
+    }
 
-        if(!(obj instanceof Advice))return false;
-        Advice advice = (Advice) obj;
-        return advice.getPointcut().equals(pointcut) && advice.getMethod().equals(method);
+    @Override
+    public boolean equals(Object obj) {
+        Advice  advice = (Advice) obj;
+        return  advice.getPointcut().equals(pointcut)&&
+                advice.getMethod().equals(method);
     }
 
     public void advice() throws InvocationTargetException, IllegalAccessException {
@@ -46,12 +54,13 @@ public class Advice {
 
 
 
-    public Advice(String type,Pointcut pointcut, String methodName){
-        this(type,pointcut,methodName,null,null);
+    public Advice(String ref,String type,Pointcut pointcut, String methodName){
+        this(ref,type,pointcut,methodName,null,null);
     }
 
-    public Advice(String type,Pointcut pointcut, String methodName, Method method, Object aspect) {
-       this.type = type;
+    public Advice(String ref,String type,Pointcut pointcut, String methodName, Method method, Object aspect) {
+        this.ref =ref;
+        this.type = type;
         this.pointcut = pointcut;
         this.methodName = methodName;
         this.method = method;
@@ -100,6 +109,15 @@ public class Advice {
 
     public Advice setType(String type) {
         this.type = type;
+        return this;
+    }
+
+    public String getRef() {
+        return ref;
+    }
+
+    public Advice setRef(String ref) {
+        this.ref = ref;
         return this;
     }
 }

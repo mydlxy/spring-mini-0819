@@ -12,7 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 public class AfterThrowingAdvice extends Advice {
 
 
-    public AfterThrowingAdvice(String type, Pointcut pointcut, String methodName) {
-        super(type, pointcut, methodName);
+    public AfterThrowingAdvice(String ref, String type, Pointcut pointcut, String methodName) {
+        super(ref, type, pointcut, methodName);
     }
 }

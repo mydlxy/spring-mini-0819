@@ -19,6 +19,16 @@ public class Pointcut {
     private String paramList;
 
 
+    @Override
+    public int hashCode() {
+        int h = 0;
+        h = accessModifier.hashCode() + h*31;
+        h = returnType.hashCode()+h*31;
+        h = classPath.hashCode()+h*31;
+        h = methodName.hashCode()+h*31;
+        h = paramList.hashCode()+h*31;
+        return h;
+    }
 
     @Override
     public boolean equals(Object obj) {

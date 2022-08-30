@@ -8,7 +8,8 @@ import aop.config.Pointcut;
  */
 
 public class BeforeAdvice extends Advice {
-    public BeforeAdvice(String type, Pointcut pointcut, String methodName) {
-        super(type, pointcut, methodName);
+
+    public BeforeAdvice(String ref, String type, Pointcut pointcut, String methodName) {
+        super(ref, type, pointcut, methodName);
     }
 }

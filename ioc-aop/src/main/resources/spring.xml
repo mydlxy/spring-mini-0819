@@ -1,11 +1,10 @@
 <beans >
-    <bean id="test1" class="tt.A"/>
+    <bean id="test2" class="tt.B" >
+        <constructor type="tt.A" ref="test1" />
+    </bean>
 
-<!--
-    <bean class="gg"/>
--->
-
-
-
+    <bean id="test1" class="tt.A">
+        <constructor type="tt.B" ref="test2" />
+    </bean>
 
 </beans>

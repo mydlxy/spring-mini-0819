@@ -4,9 +4,11 @@ import Context.ConfigInfo;
 import aop.advice.Advice;
 import aop.advice.AdvisorAdapter;
 import aop.config.PointcutUtils;
+import aop.parse.utils.AOPUtils;
 import org.dom4j.Element;
 import parse.xml.node.XmlNode;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,8 +20,8 @@ import java.util.Set;
 
 public class AdvisorParse implements XmlNode {
 
-    private static final String ASPECT = "aspect";
-    private static final String ID = "id";
+    public static final String ASPECT = "aspect";
+    public static final String ID = "id";
 
     private static final String METHOD_NAME = "method";
     private static final String POINTCUT = "pointcut";
@@ -28,11 +30,11 @@ public class AdvisorParse implements XmlNode {
     private static final String ADVICE_REF = "advice-ref";
     private static final String POINTCUT_REF = "pointcut-ref";
     private static final String REF = "ref";
-    private static final String BEFORE = "before";
-    private static final String AFTER = "after";
-    private static final String AFTER_RETURNING_ELEMENT = "after-returning";
-    private static final String AFTER_THROWING_ELEMENT = "after-throwing";
-    private static final String AROUND = "around";
+    public static final String BEFORE = "before";
+    public static final String AFTER = "after";
+    public static final String AFTER_RETURNING_ELEMENT = "afterReturning";
+    public static final String AFTER_THROWING_ELEMENT = "afterThrowing";
+    public static final String AROUND = "around";
     private static final String RETURNING = "returning";
     private static final String RETURNING_PROPERTY = "returningName";
     private static final String THROWING = "throwing";
@@ -79,20 +81,27 @@ public class AdvisorParse implements XmlNode {
 
     public void aspectParse(Element aspect,ConfigInfo configInfo){
        String ref = aspect.attributeValue(REF);
-        Set<Advice> advices = new HashSet<>();
+       AOPUtils.isNull(ref," , aspect's ref bean is null");
+       String id = aspect.attributeValue(ID);
+        if(id == null || id.trim().length() == 0)id =ref;
+
+        List<Advice> advices = new ArrayList<>();
         List<Element> adviceList = aspect.elements();
         for (Element element : adviceList) {
-            Advice advice =  adviceParse(element);
+            Advice advice =  adviceParse(element,ref,id);
             advices.add(advice);
         }
-        configInfo.getAspect().put(ref,advices);
+        configInfo.addAspect(id,advices);
     }
 
-    public Advice adviceParse(Element advice){
+    public Advice adviceParse(Element advice,String ref,String id){
         String type  = advice.getName();
+        AOPUtils.checkAspectLabel(type);
         String pointcut = advice.attributeValue(POINTCUT);
         String methodName  = advice.attributeValue(METHOD_NAME);
-        return new Advice(type, PointcutUtils.parsePointcut(pointcut),methodName);
+        AOPUtils.isNull(pointcut,",aspect id = "+id +",type = "+type+", pointcut is null");
+        AOPUtils.isNull(methodName,",aspect id = "+id +",type = "+type+", method is null");
+        return new Advice(ref,type, PointcutUtils.parsePointcut(pointcut),methodName);
     }
 
 }

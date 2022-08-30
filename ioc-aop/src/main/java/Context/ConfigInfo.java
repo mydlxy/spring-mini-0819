@@ -4,10 +4,7 @@ import aop.advice.Advice;
 import bean.BeanDefinition;
 import utils.AnnotationUtils;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -17,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ConfigInfo {
 
-    private Map<String , Set<Advice>> aspect = new HashMap<>();
+    private Map<String , List<Advice>> aspects = new HashMap<>();
 
     private ConcurrentHashMap<String , BeanDefinition>beanDefinitions = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String , Properties>    propertiesMap   = new ConcurrentHashMap<>();
@@ -43,13 +40,9 @@ public class ConfigInfo {
                 }
              }
         }
-
         if(ret == null)
             throw new RuntimeException("没有找到:"+className);
-
         return ret;
-
-
     }
 
     /*
@@ -103,15 +96,25 @@ public class ConfigInfo {
     }
 
 
-    public Map<String, Set<Advice>> getAspect() {
-        return aspect;
+    public Map<String, List<Advice>> getAspect() {
+        return aspects;
+    }
+
+    public void addAspect(String id,List<Advice> aspect){
+        if(aspects.containsKey(id))
+            throw new RuntimeException("aspect id repeat :"+id);
+
+        aspects.put(id,aspect);
     }
 
 
 
 
-    public ConfigInfo setAspect(Map<String, Set<Advice>> aspect) {
-        this.aspect = aspect;
+
+
+
+    public ConfigInfo setAspect(Map<String, List<Advice>> aspect) {
+        this.aspects = aspect;
         return this;
     }
 }

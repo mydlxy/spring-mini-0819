@@ -4,6 +4,7 @@ import Context.BeanPostProcessor;
 import aop.advice.Advice;
 import aop.config.MethodAdvice;
 import aop.config.PointcutUtils;
+import aop.parse.utils.AOPUtils;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
@@ -40,17 +41,17 @@ public class CglibProxy  {
             @Override
             public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
 
-                exeAdvice(methodAdvice.getBeforeInterceptor().getBefore(),method);
+                AOPUtils.exeAdvice(methodAdvice.getBeforeInterceptor().getBefore(),method);
                 Object ret = null;
                 try {
                      ret = proxy.invokeSuper(obj, args);
-                    exeAdvice(methodAdvice.getAfterReturningInterceptor().getAfterReturning(),method);
+                    AOPUtils.exeAdvice(methodAdvice.getAfterReturningInterceptor().getAfterReturning(),method);
                 }catch (Throwable e){
-                    List<Advice> afterThrowing = methodAdvice.getAfterThrowingInterceptor().getAfterThrowing();
+                    Set<Advice> afterThrowing = methodAdvice.getAfterThrowingInterceptor().getAfterThrowing();
                    if(afterThrowing.isEmpty())
                        throw new RuntimeException(e.getMessage());
                    else
-                    exeAdvice(afterThrowing,method);
+                       AOPUtils.exeAdvice(afterThrowing,method);
 //
                 }
                 return ret;

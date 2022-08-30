@@ -13,7 +13,7 @@ import java.lang.reflect.Method;
 public class AfterReturningAdvice extends Advice {
 
 
-    public AfterReturningAdvice(String type, Pointcut pointcut, String methodName) {
-        super(type, pointcut, methodName);
+    public AfterReturningAdvice(String ref, String type, Pointcut pointcut, String methodName) {
+        super(ref, type, pointcut, methodName);
     }
 }

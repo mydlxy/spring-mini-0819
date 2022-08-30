@@ -52,17 +52,16 @@ public class ComponentScan implements XmlNode {
     public void parseLabel(Element node, ConfigInfo configInfo) {
 
         String scanPackage = node.attributeValue(PACKAGE);
-        String path ="";
-        if(scanPackage == null)
-            path = ComponentScan.class.getResource("/").getPath();
-        else
-            path = ComponentScan.class.getResource(scanPackage.replaceAll("\\.","/")).getPath();
+        String path =Thread.currentThread().getContextClassLoader().getResource("").getPath();
+
+        if(scanPackage != null)
+            path += scanPackage.replaceAll("\\.","/");
 
         log.info("scan path:"+path);
 
         //获取到给定路径下的所有类名
         List<String> classNames = new ArrayList<>();
-        AnnotationUtils.getAllClassNames(path.substring(0,path.length()-1),scanPackage,classNames);
+        AnnotationUtils.getAllClassNames(path,scanPackage,classNames);
         //筛选出有@Com
         List<BeanDefinition> beanDefinitions = null;
         try {

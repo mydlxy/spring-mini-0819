@@ -71,8 +71,8 @@ public class BeanFactory {
             throw new RuntimeException("  single  bean  have prototype bean [ " + beanName + "]");
         if (creatingBean.contains(beanName)) {
             StringBuilder sb = new StringBuilder();
-            creatingBean.forEach(name -> sb.append(name + "->"));
-            throw new CycleDependencyException(sb.toString() + beanName);
+            creatingBean.forEach(name -> sb.append(configInfo.getBeanDefinitionByName(name).getBeanClass().getTypeName() + "->"));
+            throw new CycleDependencyException(sb.toString() + beanDefinition.getBeanClass().getTypeName());
         }
 
         /*

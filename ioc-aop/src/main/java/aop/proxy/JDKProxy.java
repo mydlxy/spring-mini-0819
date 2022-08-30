@@ -5,6 +5,7 @@ import aop.advice.Advice;
 import aop.advice.AfterReturningInterceptor;
 import aop.config.MethodAdvice;
 import aop.config.PointcutUtils;
+import aop.parse.utils.AOPUtils;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -37,29 +38,22 @@ public class JDKProxy implements  InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 
-        exeAdvice(methodAdvice.getBeforeInterceptor().getBefore(),method);
+        AOPUtils.exeAdvice(methodAdvice.getBeforeInterceptor().getBefore(),method);
         Object ret =null;
         try {
              ret = method.invoke(target, args);
-            exeAdvice(methodAdvice.getAfterReturningInterceptor().getAfterReturning(),method);
+             AOPUtils.exeAdvice(methodAdvice.getAfterReturningInterceptor().getAfterReturning(),method);
         }catch (Throwable e){
-            List<Advice> afterThrowing = methodAdvice.getAfterThrowingInterceptor().getAfterThrowing();
+            Set<Advice> afterThrowing = methodAdvice.getAfterThrowingInterceptor().getAfterThrowing();
             if(afterThrowing.isEmpty())
                 throw new RuntimeException(e.getMessage());
             else
-                exeAdvice(afterThrowing,method);
+                AOPUtils.exeAdvice(afterThrowing,method);
         }
         return ret;
     }
 
 
-    public void exeAdvice(List<Advice> advices, Method method) throws InvocationTargetException, IllegalAccessException {
-        if(!advices.isEmpty()) {
-            for (Advice advice : advices)
-                if(PointcutUtils.matchMethod(advice.getPointcut(),method))
-                    advice.advice();
-        }
-    }
 
 
 }
