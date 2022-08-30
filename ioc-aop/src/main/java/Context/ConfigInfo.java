@@ -35,13 +35,12 @@ public class ConfigInfo {
                 if(count==0){
                     ret = beanDefinition;
                     count=1;
-                }else{
-                    throw new RuntimeException("通过className"+className+"找BeanDefinition时，找到多个BeanDefinition");
-                }
+                }else
+                    throw new RuntimeException("类型为 :"+className+" 的对象在容器中注册了多个，无法通过类型找到确定对象");
              }
         }
         if(ret == null)
-            throw new RuntimeException("没有找到:"+className);
+            throw new RuntimeException("该类型对象在容器中不存在:"+className);
         return ret;
     }
 

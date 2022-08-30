@@ -67,7 +67,7 @@ public class AnnotationUtils {
                 beanDefinition.setFieldValue(field.getName(),val.value());
             }else {// @Autowired注解填入字段的是：fieldName <-> className
                 Autowired autowired = field.getAnnotation(Autowired.class);
-                beanDefinition.setFieldAutowiredRef(field.getName(),field.getType().getTypeName());
+               if(autowired != null) beanDefinition.setFieldAutowiredRef(field.getName(),field.getType().getTypeName());
             }
         }
         beanDefinitions.add(beanDefinition);

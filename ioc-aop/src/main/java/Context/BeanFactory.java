@@ -68,7 +68,7 @@ public class BeanFactory {
     public Object creatBean(BeanDefinition beanDefinition,boolean creatSingle) throws Exception {
         String beanName = beanDefinition.getBeanName();
         if (creatSingle && !beanDefinition.getScope().equals(SINGLE))
-            throw new RuntimeException("  single  bean  have prototype bean [ " + beanName + "]");
+            throw new RuntimeException("  error single  bean  have prototype bean [ " + beanName + "]");
         if (creatingBean.contains(beanName)) {
             StringBuilder sb = new StringBuilder();
             creatingBean.forEach(name -> sb.append(configInfo.getBeanDefinitionByName(name).getBeanClass().getTypeName() + "->"));
@@ -184,9 +184,17 @@ public class BeanFactory {
                 if(value ==null)value = creatPrototype(configInfo.getBeanDefinitionByName(beanReference.getRef()));
                 field.set(bean,value);
             }else{
-                Object value =  getBeanByClassName(beanReference.getType(),postProcessSingleBean);
-                if(value == null) value = creatPrototype(configInfo.getBeanDefinitionByClassName(beanReference.getType()));
-                field.set(bean,value);
+                try{
+                    BeanDefinition autowiredBean = configInfo.getBeanDefinitionByClassName(beanReference.getType());
+                    Object value = null;
+                    if(autowiredBean.getScope().equals(SINGLE))
+                        value =  getBeanByClassName(beanReference.getType(),postProcessSingleBean);
+                    else
+                        value = creatPrototype(autowiredBean);
+                    field.set(bean,value);
+                }catch (RuntimeException ne){
+                    throw new RuntimeException(ne.getMessage()+";  在"+beanClass.getTypeName()+" 中使用@autowired 注解注入对象时出错，出错字段："+beanReference.getName());
+                }
             }
         }
 
@@ -196,20 +204,13 @@ public class BeanFactory {
 
 
     public Object getBeanByClassName(String className,Map<String,Object> cache){
-        int count=0;
-        Object ret=null;
         for (Object value : cache.values()) {
             if(value.getClass().getTypeName().equals(className) ||
-                    AnnotationUtils.matchSuperOrInterface(value.getClass(),className)){
-                if(count == 0){
-                    ret=value;
-                    count=1;
-                }else{
-                    throw new RuntimeException(className+" :@Autowired注解该类型超过 1个对象");
-                }
+               AnnotationUtils.matchSuperOrInterface(value.getClass(),className)){
+               return value;
             }
         }
-        return ret;
+        throw new NullPointerException("没有找到该类型的对象："+className);
     }
 
 

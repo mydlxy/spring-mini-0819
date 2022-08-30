@@ -6,5 +6,7 @@
     <bean id="test1" class="tt.A">
         <constructor type="tt.B" ref="test2" />
     </bean>-->
+   <bean class="tt.inr.AutowiredTest" />
+   <bean id="y" class="tt.inr.AutowiredTest" />
 
 </beans>
