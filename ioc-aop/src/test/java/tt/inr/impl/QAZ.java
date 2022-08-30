@@ -23,7 +23,7 @@ public class QAZ implements QWE {
     String tt;
     @Value("${ fg }")
     String gh;
-    @Value("${name}")
+    @Value("${test2.name}")
     String nb;
     @Value("my addr")
     String addr;

@@ -10,7 +10,7 @@ import parse.annotation.Value;
 
 @Component
 public class AutowiredTest {
-    @Value("${autowired }")
+    @Value("${autowired.q1 }")
     String q1;
     @Value("dgd")
     String q2;

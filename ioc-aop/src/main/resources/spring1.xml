@@ -1,5 +1,6 @@
 <beans >
 
     <propertyPlaceholder load="test.properties"/>
+    <propertyPlaceholder load="test2.properties"/>
     <componentScan  package="tt"/>
 </beans>

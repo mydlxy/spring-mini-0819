@@ -54,7 +54,7 @@ public class ConfigInfo {
     public String getPropertiesValue(String key){
 
         if(propertiesMap.isEmpty())
-            throw new NullPointerException("没有加载 properties 文件。");
+            throw new NullPointerException("没有加载 properties 文件。不能解析@Value引用：${"+key+"}");
 
 
         if(key.matches(".*\\..*")){
