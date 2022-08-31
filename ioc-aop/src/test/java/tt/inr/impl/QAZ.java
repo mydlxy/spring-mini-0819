@@ -18,6 +18,7 @@ import tt.inr.QWE;
 public class QAZ implements QWE {
 
 
+    @Autowired
     AutowiredTest autowiredTest;
 
     @Value(" ${t1} ")

@@ -8,5 +8,4 @@
     </bean>-->
    <bean class="tt.inr.AutowiredTest" />
    <bean id="y" class="tt.inr.AutowiredTest" />
-
-</beans>
+ </beans>

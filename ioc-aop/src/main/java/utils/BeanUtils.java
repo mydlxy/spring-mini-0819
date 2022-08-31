@@ -60,4 +60,11 @@ public class BeanUtils {
         return configInfo.getPropertiesValue(refPropertiesKey);
     }
 
+    public static String getSimpleName(String className){
+        int index = className.lastIndexOf(".");
+        String beanName = className.substring(index+1);
+        return beanName.substring(0,1).toLowerCase() + beanName.substring(1);
+    }
+
+
 }

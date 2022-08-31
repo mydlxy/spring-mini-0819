@@ -57,7 +57,7 @@ public class AnnotationUtils {
 
     public static void getBeanDefinition(String className,Class beanClass,List<BeanDefinition> beanDefinitions){
         BeanDefinition beanDefinition = new BeanDefinition();
-        String beanName = className.substring(0,1).toLowerCase() + className.substring(1);
+        String beanName = BeanUtils.getSimpleName(className);
         beanDefinition.setBeanName(beanName).setBeanClass(beanClass);
         Field[] fields = beanClass.getDeclaredFields();
         //只处理字段的 @Value，@Autowire这2个注解

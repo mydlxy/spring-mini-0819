@@ -5,6 +5,7 @@ import bean.BeanDefinition;
 
 import exception.LabelException;
 import org.dom4j.Element;
+import utils.BeanUtils;
 
 import java.util.List;
 
@@ -52,7 +53,7 @@ public class Bean implements XmlNode {
         String className = node.attributeValue(CLASS);
         String id = node.attributeValue(ID);
         String scope = node.attributeValue(SCOPE);
-        if(id == null || id.trim().length() == 0)id = getSimpleName(className);
+        if(id == null || id.trim().length() == 0)id = BeanUtils.getSimpleName(className);
         if(scope == null || scope.trim().length() == 0)scope = DEFAULT_SCOPE;
         try {
             beanDefinition.setBeanClass(Class.forName(className)).setBeanName(id).setScope(scope);
@@ -66,10 +67,6 @@ public class Bean implements XmlNode {
 
     }
 
-     String getSimpleName(String className){
-        int index = className.lastIndexOf(".");
-        return className.substring(index+1);
-     }
 
 
      void parseChildrenLabel(List<Element> children, BeanDefinition beanDefinition){
