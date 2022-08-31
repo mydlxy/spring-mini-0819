@@ -50,7 +50,11 @@ public class BeanUtils {
 
     public static Object convertTrueTypeValue(String type, String value, ConfigInfo configInfo){
         if(value.matches("\\$\\{.+\\}"))value  = getPropertiesValue(value,configInfo);
-        return TypeConvert.simpleTypeConvert(value,type);
+        try {
+            return TypeConvert.simpleTypeConvert(value, type);
+        }catch (NumberFormatException e){
+            throw new NumberFormatException(e.getMessage()+" ; 字段类型："+type +" ;字段赋值："+value);
+        }
 
     }
 

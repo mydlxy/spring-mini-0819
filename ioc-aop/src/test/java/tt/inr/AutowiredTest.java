@@ -18,6 +18,9 @@ public class AutowiredTest {
     int yy;
     @Value("true")
     boolean rr;
+    @Value("3.14y")
+    Float aFloat;
+
     @Override
     public String toString() {
         return "AutowiredTest{" +
@@ -25,6 +28,7 @@ public class AutowiredTest {
                 ", q2='" + q2 + '\'' +
                 ", yy=" + yy +
                 ", rr=" + rr +
+                ", aFloat=" + aFloat +
                 '}';
     }
 }
