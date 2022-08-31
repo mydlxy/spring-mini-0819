@@ -31,11 +31,10 @@ public class QAZ implements QWE {
     String addr;
 
 
-
     @Override
     public String toString() {
         return "QAZ{" +
-
+                "autowiredTest=" + autowiredTest +
                 ", tt='" + tt + '\'' +
                 ", gh='" + gh + '\'' +
                 ", nb='" + nb + '\'' +
@@ -45,8 +44,9 @@ public class QAZ implements QWE {
 
     @Override
     public void print() {
-        System.out.println("autowiredTest  print method  before...");
-        autowiredTest.print();
-        System.out.println("autowiredTest  print method  after...");
+        System.out.println(autowiredTest);
+//        System.out.println("autowiredTest  print method  before...");
+//        autowiredTest.print();
+//        System.out.println("autowiredTest  print method  after...");
     }
 }

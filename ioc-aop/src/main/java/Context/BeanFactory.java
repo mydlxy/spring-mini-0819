@@ -47,7 +47,7 @@ public class BeanFactory {
     /*
     * 可以使用的 bean，结合BeanDefinition中的信息给 postProcessSingleBean 中bean的属性赋值
     * */
-    Map<String,Object> useSingleBean = new HashMap<>();
+//    Map<String,Object> useSingleBean = new HashMap<>();
     /*
     * 正在创建的 beanName
     * */
@@ -158,7 +158,7 @@ public class BeanFactory {
 
         //被proxy代理的类，生成bean和原本类没有继承关系，因此不能直接设置字段值，只能找到
         //其原本的类，将其赋值；因为被代理类，会持有原本类，因此赋值给原本类之后，就行了；
-        if(beanDefinition.getScope().equals(SINGLE))useSingleBean.putIfAbsent(beanDefinition.getBeanName(),bean);
+        if(beanDefinition.getScope().equals(SINGLE))postProcessSingleBean.putIfAbsent(beanDefinition.getBeanName(),bean);
         if(Proxy.class.isInstance(bean)){
             bean= initSingleBean.get(beanDefinition.getBeanName());
         }
@@ -231,8 +231,10 @@ public class BeanFactory {
         BeanDefinition beanDefinition = configInfo.getBeanDefinitionByName(name);
         String single = beanDefinition.getScope();
         if(single.equals(SINGLE))
-            return  useSingleBean.get(name);
+//            return  useSingleBean.get(name);
+            return  postProcessSingleBean.get(name);
         else
+
             return creatPrototype(beanDefinition);
     }
 
@@ -241,7 +243,7 @@ public class BeanFactory {
         BeanDefinition beanDefinition = configInfo.getBeanDefinitionByClassName(className);
         String single = beanDefinition.getScope();
         if(single.equals(SINGLE)){
-            for (Object value : useSingleBean.values()) {
+            for (Object value : postProcessSingleBean.values()) {// useSingleBean
                 if(value.getClass().getTypeName().equals(className) ||
                         AnnotationUtils.matchSuperOrInterface(value.getClass(),className))
                     return value;
