@@ -149,7 +149,7 @@ public class XmlApplicationContext implements ApplicationContext {
             beanFactory.getInitSingleBean().forEach((name,bean)->{
             try {
                    bean =  beanPostProcessor.postProcessor(bean,methodAdvice);
-                    beanFactory.postProcessSingleBean.put(name,bean);
+                    beanFactory.postProcessSingleBean.putIfAbsent(name,bean);
                 } catch (Exception e) {
                     e.printStackTrace();
                     throw new RuntimeException(e.getMessage());
@@ -167,15 +167,29 @@ public class XmlApplicationContext implements ApplicationContext {
      */
     void initMethodAdvice(){
         Map<String, List<Advice>> aspects = beanFactory.configInfo.getAspect();
-        aspects.forEach((ref,advices)->{
-            Object bean = beanFactory.getBeanInInitBean(ref);
-            List<Advice> adviceSet = aspects.get(ref);
-            if(bean == null){
-                    throw new RuntimeException("aspect bean not single ref:"+ ref);
+        aspects.forEach((id,advices)->{
+            String ref = splitAspectID(id);
+            try {
+                beanFactory.creatAopBean(ref);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+            Object bean = null;
+            try {
+                bean = beanFactory.getBeanByName(ref);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            List<Advice> adviceSet = aspects.get(id);
+
             fillMethodAdvice(bean,adviceSet);
         });
 
+    }
+
+    public String splitAspectID(String aspectID){
+        int indexOfRef = aspectID.indexOf(':');
+        return aspectID.substring(indexOfRef+1);
     }
 
     /*

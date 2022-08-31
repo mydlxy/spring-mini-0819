@@ -4,6 +4,7 @@ import aop.config.MethodAdvice;
 import bean.*;
 import com.sun.org.apache.bcel.internal.generic.RETURN;
 import exception.CycleDependencyException;
+import parse.xml.node.Bean;
 import utils.AnnotationUtils;
 import utils.BeanUtils;
 import utils.TypeConvert;
@@ -157,7 +158,7 @@ public class BeanFactory {
 
         //被proxy代理的类，生成bean和原本类没有继承关系，因此不能直接设置字段值，只能找到
         //其原本的类，将其赋值；因为被代理类，会持有原本类，因此赋值给原本类之后，就行了；
-        if(beanDefinition.getScope().equals(SINGLE))useSingleBean.put(beanDefinition.getBeanName(),bean);
+        if(beanDefinition.getScope().equals(SINGLE))useSingleBean.putIfAbsent(beanDefinition.getBeanName(),bean);
         if(Proxy.class.isInstance(bean)){
             bean= initSingleBean.get(beanDefinition.getBeanName());
         }
@@ -171,12 +172,7 @@ public class BeanFactory {
         for (PropertyValue propertyValue : propertyValues) {
             Field field = beanClass.getDeclaredField(propertyValue.getName());
             field.setAccessible(true);
-            try{
-                field.set(bean, BeanUtils.convertTrueTypeValue(field.getType().getTypeName(),propertyValue.getValue().trim(),configInfo));
-            }catch (RuntimeException e){
-                throw new RuntimeException(e.getMessage()+" ;\n 在给对象属性注入值时发生错误错误,出错的对象类型："+beanClass.getTypeName()+" ;出错字段："+field.getName());
-            }
-
+            BeanUtils.setFieldBaseTypeValue(bean,field,propertyValue.getValue(),configInfo);
         }
         if(beanReferences != null)
         for (BeanReference beanReference : beanReferences) {
@@ -260,6 +256,14 @@ public class BeanFactory {
 
     public Object getBeanInInitBean(String name){
         return initSingleBean.get(name);
+    }
+
+    public void creatAopBean(String name) throws Exception {
+        BeanDefinition beanDef = configInfo.getBeanDefinitionByName(name);
+        if(!beanDef.getScope().equals(SINGLE))throw new NullPointerException("aspect bean not singleBean error");
+        Object aopInitBean = initSingleBean.get(name);
+        postProcessSingleBean.putIfAbsent(name,aopInitBean);
+        fillBeanProperty(beanDef,aopInitBean);
     }
 
 }

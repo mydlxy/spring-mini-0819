@@ -83,8 +83,8 @@ public class AdvisorParse implements XmlNode {
        String ref = aspect.attributeValue(REF);
        AOPUtils.isNull(ref," , aspect's ref bean is null");
        String id = aspect.attributeValue(ID);
-        if(id == null || id.trim().length() == 0)id =ref;
-
+       if(id == null || id.trim().length() == 0)id =ref;
+        id = id+":"+ref;
         List<Advice> advices = new ArrayList<>();
         List<Element> adviceList = aspect.elements();
         for (Element element : adviceList) {

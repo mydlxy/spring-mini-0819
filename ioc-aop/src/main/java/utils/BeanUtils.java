@@ -7,6 +7,7 @@ import bean.PropertyValue;
 
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -68,6 +69,15 @@ public class BeanUtils {
         int index = className.lastIndexOf(".");
         String beanName = className.substring(index+1);
         return beanName.substring(0,1).toLowerCase() + beanName.substring(1);
+    }
+
+    public static void setFieldBaseTypeValue(Object bean, Field field,String stringValue,ConfigInfo configInfo) throws IllegalAccessException {
+      try{
+          Object trueTypeValue = convertTrueTypeValue(field.getType().getTypeName(),stringValue,configInfo);
+          field.set(bean,trueTypeValue);
+      }catch (NumberFormatException e){
+          throw new IllegalAccessException(e.getMessage()+" ;\n 在给对象属性注入值时发生错误错误,出错的对象类型："+bean.getClass().getTypeName()+" ;出错字段："+field.getName());
+      }
     }
 
 

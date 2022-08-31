@@ -18,7 +18,7 @@ public class AutowiredTest {
     int yy;
     @Value("true")
     boolean rr;
-    @Value("3.14y")
+    @Value("3.13")
     Float aFloat;
 
     @Override

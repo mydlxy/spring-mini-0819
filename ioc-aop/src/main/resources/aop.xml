@@ -2,7 +2,7 @@
     <bean  id="aspect" class="tt.AOPtest"/>
     <bean class ="tt.Aspected"/>
     <aopConfig>
-        <aspect ref = "aspect">
+        <aspect id= "aop1" ref = "aspect">
             <before pointcut="execution (* * tt.inr.impl.* *())"  method="before" />
             <!--<after pointcut="execution (* * * *())"  method="after" />-->
             <around pointcut="execution (* * tt.inr.impl.*  *())"  method="before" />
