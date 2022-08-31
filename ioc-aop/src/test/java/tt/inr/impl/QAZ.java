@@ -19,7 +19,7 @@ public class QAZ implements QWE {
 
 
     @Autowired
-    AutowiredTest autowiredTest;
+   public AutowiredTest autowiredTest;
 
     @Value(" ${t1} ")
     String tt;
@@ -30,10 +30,12 @@ public class QAZ implements QWE {
     @Value("my addr")
     String addr;
 
+
+
     @Override
     public String toString() {
         return "QAZ{" +
-                "autowiredTest=" +autowiredTest.toString() +
+
                 ", tt='" + tt + '\'' +
                 ", gh='" + gh + '\'' +
                 ", nb='" + nb + '\'' +
@@ -43,6 +45,8 @@ public class QAZ implements QWE {
 
     @Override
     public void print() {
-        System.out.println(toString());
+        System.out.println("autowiredTest  print method  before...");
+        autowiredTest.print();
+        System.out.println("autowiredTest  print method  after...");
     }
 }

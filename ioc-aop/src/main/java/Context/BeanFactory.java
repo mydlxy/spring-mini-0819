@@ -166,37 +166,46 @@ public class BeanFactory {
         FieldValues fieldValues = beanDefinition.getFieldValues();
         if(fieldValues == null)return;
         Class beanClass = beanDefinition.getBeanClass();
-        List<PropertyValue> propertyValues = fieldValues.getPropertyValues();
-        List<BeanReference> beanReferences = fieldValues.getBeanReferences();
+        //填充基础属性：在xml配置的基础类型的属性，或者是@Value注入的属性；
+        fillBeanPropertyValues(beanClass,bean,fieldValues.getPropertyValues());
+        //填充引用类的属性：ref，@autowired注解
+        fillBeanReferenceValues(beanClass,bean,fieldValues.getBeanReferences());
+    }
+
+
+     void fillBeanPropertyValues(Class beanClass ,Object bean,List<PropertyValue> propertyValues) throws NoSuchFieldException, IllegalAccessException {
         if(propertyValues != null)
-        for (PropertyValue propertyValue : propertyValues) {
-            Field field = beanClass.getDeclaredField(propertyValue.getName());
-            field.setAccessible(true);
-            BeanUtils.setFieldBaseTypeValue(bean,field,propertyValue.getValue(),configInfo);
-        }
+            for (PropertyValue propertyValue : propertyValues) {
+                Field field = beanClass.getDeclaredField(propertyValue.getName());
+                field.setAccessible(true);
+                BeanUtils.setFieldBaseTypeValue(bean,field,propertyValue.getValue(),configInfo);
+            }
+    }
+
+     void fillBeanReferenceValues(Class beanClass ,Object bean,List<BeanReference>beanReferences) throws Exception {
         if(beanReferences != null)
-        for (BeanReference beanReference : beanReferences) {
-            Field field = beanClass.getDeclaredField(beanReference.getName());
-            field.setAccessible(true);
-            boolean autowired = beanReference.isAutowired();
-            if(!autowired){
-                Object value = postProcessSingleBean.get(beanReference.getRef());
-                if(value ==null)value = creatPrototype(configInfo.getBeanDefinitionByName(beanReference.getRef()));
-                field.set(bean,value);
-            }else{
-                try{
-                    BeanDefinition autowiredBean = configInfo.getBeanDefinitionByClassName(beanReference.getType());
-                    Object value = null;
-                    if(autowiredBean.getScope().equals(SINGLE))
-                        value =  getBeanByClassName(beanReference.getType(),postProcessSingleBean);
-                    else
-                        value = creatPrototype(autowiredBean);
+            for (BeanReference beanReference : beanReferences) {
+                Field field = beanClass.getDeclaredField(beanReference.getName());
+                field.setAccessible(true);
+                boolean autowired = beanReference.isAutowired();
+                if(!autowired){
+                    Object value = postProcessSingleBean.get(beanReference.getRef());
+                    if(value ==null)value = creatPrototype(configInfo.getBeanDefinitionByName(beanReference.getRef()));
                     field.set(bean,value);
-                }catch (RuntimeException ne){
-                    throw new RuntimeException(ne.getMessage()+";  在"+beanClass.getTypeName()+" 中使用@autowired 注解注入对象时出错，出错字段："+beanReference.getName());
+                }else{
+                    try{
+                        BeanDefinition autowiredBean = configInfo.getBeanDefinitionByClassName(beanReference.getType());
+                        Object value = null;
+                        if(autowiredBean.getScope().equals(SINGLE))
+                            value =  getBeanByClassName(beanReference.getType(),postProcessSingleBean);
+                        else
+                            value = creatPrototype(autowiredBean);
+                        field.set(bean,value);
+                    }catch (RuntimeException ne){
+                        throw new RuntimeException(ne.getMessage()+";  在"+beanClass.getTypeName()+" 中使用@autowired 注解注入对象时出错，出错字段："+beanReference.getName());
+                    }
                 }
             }
-        }
 
     }
 

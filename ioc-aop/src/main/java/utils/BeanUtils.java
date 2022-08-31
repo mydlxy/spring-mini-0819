@@ -73,7 +73,7 @@ public class BeanUtils {
 
     public static void setFieldBaseTypeValue(Object bean, Field field,String stringValue,ConfigInfo configInfo) throws IllegalAccessException {
       try{
-          Object trueTypeValue = convertTrueTypeValue(field.getType().getTypeName(),stringValue,configInfo);
+          Object trueTypeValue = convertTrueTypeValue(field.getType().getTypeName(),stringValue.trim(),configInfo);
           field.set(bean,trueTypeValue);
       }catch (NumberFormatException e){
           throw new IllegalAccessException(e.getMessage()+" ;\n 在给对象属性注入值时发生错误错误,出错的对象类型："+bean.getClass().getTypeName()+" ;出错字段："+field.getName());

@@ -21,6 +21,17 @@ public class AutowiredTest {
     @Value("3.13")
     Float aFloat;
 
+    public void print(){
+        System.out.println("AutowiredTest{" +
+                "q1='" + q1 + '\'' +
+                ", q2='" + q2 + '\'' +
+                ", yy=" + yy +
+                ", rr=" + rr +
+                ", aFloat=" + aFloat +
+                '}');
+    }
+
+
     @Override
     public String toString() {
         return "AutowiredTest{" +

@@ -30,6 +30,7 @@ public class TestAOP {
         qaz.print();
 
 
+
     }
     @Test
     public void test1(){

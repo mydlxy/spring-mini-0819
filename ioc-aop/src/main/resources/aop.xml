@@ -3,9 +3,9 @@
     <bean class ="tt.Aspected"/>
     <aopConfig>
         <aspect id= "aop1" ref = "aspect">
-            <before pointcut="execution (* * tt.inr.impl.* *())"  method="before" />
+            <before pointcut="execution (* * tt.inr.. *())"  method="before" />
             <!--<after pointcut="execution (* * * *())"  method="after" />-->
-            <around pointcut="execution (* * tt.inr.impl.*  *())"  method="before" />
+            <around pointcut="execution (* * tt.inr..  *())"  method="before" />
         </aspect>
     </aopConfig>
 </beans>
