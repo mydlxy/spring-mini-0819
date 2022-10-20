@@ -1,9 +1,8 @@
 package tt.inr.impl;
 
-import parse.annotation.Autowired;
-import parse.annotation.Component;
-import parse.annotation.Value;
-import tt.A;
+import ioc.parse.annotation.Autowired;
+import ioc.parse.annotation.Component;
+import ioc.parse.annotation.Value;
 import tt.inr.AutowiredTest;
 import tt.inr.QWE;
 
@@ -18,7 +17,8 @@ import tt.inr.QWE;
 public class QAZ implements QWE {
 
 
-    AutowiredTest autowiredTest;
+    @Autowired
+   public AutowiredTest autowiredTest;
 
     @Value(" ${t1} ")
     String tt;
@@ -29,10 +29,11 @@ public class QAZ implements QWE {
     @Value("my addr")
     String addr;
 
+
     @Override
     public String toString() {
         return "QAZ{" +
-                "autowiredTest=" +autowiredTest.toString() +
+                "autowiredTest=" + null +
                 ", tt='" + tt + '\'' +
                 ", gh='" + gh + '\'' +
                 ", nb='" + nb + '\'' +
@@ -42,6 +43,8 @@ public class QAZ implements QWE {
 
     @Override
     public void print() {
-        System.out.println(toString());
+        System.out.println("test aop repeat...");
     }
+
+
 }

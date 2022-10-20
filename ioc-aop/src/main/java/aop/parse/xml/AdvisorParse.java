@@ -1,17 +1,14 @@
 package aop.parse.xml;
 
-import Context.ConfigInfo;
+import ioc.Context.ConfigInfo;
 import aop.advice.Advice;
-import aop.advice.AdvisorAdapter;
 import aop.config.PointcutUtils;
 import aop.parse.utils.AOPUtils;
 import org.dom4j.Element;
-import parse.xml.node.XmlNode;
+import ioc.parse.xml.node.XmlNode;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author myd
@@ -83,15 +80,15 @@ public class AdvisorParse implements XmlNode {
        String ref = aspect.attributeValue(REF);
        AOPUtils.isNull(ref," , aspect's ref bean is null");
        String id = aspect.attributeValue(ID);
-        if(id == null || id.trim().length() == 0)id =ref;
-
+       if(id == null || id.trim().length() == 0)id =ref;
+       String finalUseId = id+":"+ref;
         List<Advice> advices = new ArrayList<>();
         List<Element> adviceList = aspect.elements();
         for (Element element : adviceList) {
-            Advice advice =  adviceParse(element,ref,id);
+            Advice advice =  adviceParse(element,ref,finalUseId);
             advices.add(advice);
         }
-        configInfo.addAspect(id,advices);
+        configInfo.addAspect(finalUseId,advices);
     }
 
     public Advice adviceParse(Element advice,String ref,String id){

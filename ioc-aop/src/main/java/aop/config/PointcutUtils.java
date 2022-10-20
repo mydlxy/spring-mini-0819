@@ -2,6 +2,7 @@ package aop.config;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.sql.Ref;
 
 /**
  * @author myd
@@ -14,8 +15,8 @@ public class PointcutUtils {
 
     private static final String RETURN_TYPE;
 
-    private static final String CLASS_PATH = "((\\*?\\w+\\*?|\\*)\\.)*(\\*?\\w+\\*?|\\*)";
-
+//    private static final String CLASS_PATH = "((\\*?\\w+\\*?|\\*)\\.)*(\\*?\\w+\\*?|\\*)";
+    private static final String CLASS_PATH = "((\\*?\\w+\\*?|\\*)\\.)*(\\*?\\w+\\*?|\\*)(\\.\\.)?";
     private static final String METHOD_NAME = "(\\*?\\w+\\*?|\\*)";
 
     private static final String PARAM_LIST;
@@ -61,7 +62,16 @@ public class PointcutUtils {
     }
     public static boolean matchClass(Pointcut pointcut, Class cla) {
         if (pointcut.getClassPath().equals("*")) return true;
-        return cla.getTypeName().matches(pointcut.getClassPath().replaceAll("\\*", "\\\\w*").replaceAll("\\.", "\\\\."));
+        String regex = pointcut.getClassPath().replaceAll("\\*", "\\\\w*");
+        if(regex.endsWith("..")){
+            regex = regex.substring(0,regex.length()-2);
+            regex = regex.replaceAll("\\.","\\\\.");//将 "." ==> "\."
+            regex+=".*";
+        }else{
+            regex = regex.replaceAll("\\.", "\\\\.");
+        }
+        return cla.getTypeName().matches(regex);
+//        return cla.getTypeName().matches(pointcut.getClassPath().replaceAll("\\*", "\\\\w*").replaceAll("\\.", "\\\\."));
     }
     public static boolean matchMethod(Pointcut pointcut, Method method) {
         return matchModifier(pointcut.getAccessModifier(), method) &&

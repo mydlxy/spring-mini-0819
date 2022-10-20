@@ -1,7 +1,7 @@
 package tt.inr;
 
-import parse.annotation.Component;
-import parse.annotation.Value;
+import ioc.parse.annotation.Component;
+import ioc.parse.annotation.Value;
 
 /**
  * @author myd
@@ -18,6 +18,20 @@ public class AutowiredTest {
     int yy;
     @Value("true")
     boolean rr;
+    @Value("3.13")
+    Float aFloat;
+
+    public void print(){
+        System.out.println("AutowiredTest{" +
+                "q1='" + q1 + '\'' +
+                ", q2='" + q2 + '\'' +
+                ", yy=" + yy +
+                ", rr=" + rr +
+                ", aFloat=" + aFloat +
+                '}');
+    }
+
+
     @Override
     public String toString() {
         return "AutowiredTest{" +
@@ -25,6 +39,7 @@ public class AutowiredTest {
                 ", q2='" + q2 + '\'' +
                 ", yy=" + yy +
                 ", rr=" + rr +
+                ", aFloat=" + aFloat +
                 '}';
     }
 }

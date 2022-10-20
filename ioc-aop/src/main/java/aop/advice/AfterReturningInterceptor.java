@@ -18,7 +18,6 @@ public class AfterReturningInterceptor {
         afterReturning = new HashSet<>();
     }
     public void add(Advice advice){
-        if(!afterReturning.contains(advice))
          afterReturning.add(advice);
     }
 

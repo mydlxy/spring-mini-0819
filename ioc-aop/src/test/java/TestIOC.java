@@ -1,4 +1,4 @@
-import Context.XmlApplicationContext;
+import ioc.Context.XmlApplicationContext;
 import org.junit.Test;
 import tt.A;
 import tt.B;
