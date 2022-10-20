@@ -1,7 +1,7 @@
 package tt.inr;
 
-import parse.annotation.Component;
-import parse.annotation.Value;
+import ioc.parse.annotation.Component;
+import ioc.parse.annotation.Value;
 
 /**
  * @author myd

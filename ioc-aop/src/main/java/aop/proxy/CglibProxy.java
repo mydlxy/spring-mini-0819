@@ -1,17 +1,13 @@
 package aop.proxy;
 
-import Context.BeanPostProcessor;
 import aop.advice.Advice;
 import aop.config.MethodAdvice;
-import aop.config.PointcutUtils;
 import aop.parse.utils.AOPUtils;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -61,12 +57,6 @@ public class CglibProxy  {
     }
 
 
-    public void exeAdvice(List<Advice> advices, Method method) throws InvocationTargetException, IllegalAccessException {
-        if(!advices.isEmpty()) {
-            for (Advice advice : advices)
-                if(PointcutUtils.matchMethod(advice.getPointcut(),method))
-                    advice.advice();
-        }
-    }
+
 
 }

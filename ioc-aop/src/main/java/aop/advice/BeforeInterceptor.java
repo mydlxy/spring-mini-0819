@@ -23,7 +23,6 @@ public class BeforeInterceptor {
     }
 
     public void add(Advice advice){
-        if(!before.contains(advice))
              before.add(advice);
     }
 

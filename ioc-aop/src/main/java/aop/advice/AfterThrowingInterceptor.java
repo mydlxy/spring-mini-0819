@@ -1,8 +1,6 @@
 package aop.advice;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -17,7 +15,6 @@ public class AfterThrowingInterceptor {
         afterThrowing = new HashSet<>();
     }
     public void add(Advice advice){
-        if(!afterThrowing.contains(advice))
             afterThrowing.add(advice);
     }
 
